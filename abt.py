@@ -1,6 +1,6 @@
-from pandas import read_csv, cut # read_abt
+from pandas import read_csv, cut # needed for read_abt function
 from pandas import merge, DataFrame, concat
-from scipy.stats import norm # p_value
+from scipy.stats import norm # needed for p_value function
 from numpy import abs, inf, nan
 from boto3 import client
 
