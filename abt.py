@@ -1,3 +1,4 @@
+from numba import jit
 from pandas import read_csv, cut # read_abt
 from pandas import merge, DataFrame, concat
 from scipy.stats import norm # p_value
