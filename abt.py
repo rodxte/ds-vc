@@ -4,6 +4,7 @@ from scipy.stats import norm # p_value
 from numpy import abs, inf, nan
 from boto3 import client
 
+@jit(nopython=True)
 def read_abt(main, meta):
     # -----------  MAKE PRETTY  -----------
     df = read_csv(main, parse_dates=['hit_time'], compression='gzip')
