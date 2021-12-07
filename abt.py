@@ -1,11 +1,11 @@
-from numba import jit
+import numba
 from pandas import read_csv, cut # read_abt
 from pandas import merge, DataFrame, concat
 from scipy.stats import norm # p_value
 from numpy import abs, inf, nan
 from boto3 import client
 
-@jit(nopython=True)
+@numba.jit(nopython=True, parallel=True)
 def read_abt(main, meta):
     # -----------  MAKE PRETTY  -----------
     df = read_csv(main, parse_dates=['hit_time'], compression='gzip')
