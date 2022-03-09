@@ -146,7 +146,7 @@ def p_factor(*factor, goal, df, variations=[1,2], min_visitors=100):
         # FIND OUT IF SRM ERROR IS PRESENT
         observed = [combs['visitors_A'], combs['visitors_B']]
         expected = [(combs['visitors_A'] + combs['visitors_B'])/2, (combs['visitors_A'] + combs['visitors_B'])/2]
-        combs['srm-probability'] = list(chisquare(observed, f_exp = expected))[1]
+        combs['srm-p_value'] = list(chisquare(observed, f_exp = expected))[1]
 
         # Calculate Zscore based on SEMs
         zscore = combs['absolute_uplift']/(combs['sem_A']**2 + combs['sem_B']**2)**0.5
@@ -159,8 +159,8 @@ def p_factor(*factor, goal, df, variations=[1,2], min_visitors=100):
 #         combs['mannwhitneyu_less_2'] = round(mannwhitneyu(a1, b1, alternative='two-sided').pvalue,4)
 #         combs['ttestind_less_2'] = round(ttest_ind(a1, b1, alternative='two-sided').pvalue,4)
 
-        # Calculate P-Values out of Zscore
-        combs['p-value'] = norm.sf(abs(zscore))
+        # Calculate p_values out of Zscore
+        combs['p_value'] = norm.sf(abs(zscore))
         
         combs['visitors_A'], combs['visitors_B'], combs['n_of_conversions_A'], combs['n_of_conversions_B'] =\
         combs['visitors_A'].astype(int), combs['visitors_B'].astype(int),\
@@ -172,11 +172,11 @@ def p_factor(*factor, goal, df, variations=[1,2], min_visitors=100):
 
         # Return only Meaningful Columns
         combs = combs.sort_values(by='relative_uplift', ascending=False).reset_index(drop=True)
-        combs = combs[[*factor, 'visitors_A', 'visitors_B', 'n_of_conversions_A', 'n_of_conversions_B', 'cr_A', 'cr_B', 'relative_uplift', 'p-value',\
-                       'absolute_uplift', 'srm-probability']]
+        combs = combs[[*factor, 'visitors_A', 'visitors_B', 'n_of_conversions_A', 'n_of_conversions_B', 'cr_A', 'cr_B', 'relative_uplift', 'p_value',\
+                       'absolute_uplift', 'srm-p_value']]
         # Round Output Final Values               
         combs[['cr_A', 'cr_B', 'relative_uplift', 'absolute_uplift']] = round((combs[['cr_A', 'cr_B', 'relative_uplift', 'absolute_uplift']]*100), 2)
-        combs['p-value'] = round(combs['p-value'], 3)
+        combs['p_value'] = round(combs['p_value'], 3)
 
         return combs
     else:
@@ -191,13 +191,13 @@ def p_factor(*factor, goal, df, variations=[1,2], min_visitors=100):
         # FIND OUT IF SRM ERROR IS PRESENT
         observed = [combs['visitors_A'], combs['visitors_B']]
         expected = [(combs['visitors_A'] + combs['visitors_B'])/2, (combs['visitors_A'] + combs['visitors_B'])/2]
-        combs['srm-probability'] = list(chisquare(observed, f_exp = expected))[1]
+        combs['srm-p_value'] = list(chisquare(observed, f_exp = expected))[1]
 
         # Calculate Zscore based on SEMs
         zscore = combs['absolute_uplift']/(combs['sem_A']**2 + combs['sem_B']**2)**0.5
 
-        # Calculate P-Values out of Zscore
-        combs['p-value'] = norm.sf(abs(zscore))
+        # Calculate p_values out of Zscore
+        combs['p_value'] = norm.sf(abs(zscore))
         
 #         # STAT TESTs
 #         a1 = df.groupby('combination_id')[goal].get_group(variations[0])
@@ -211,10 +211,10 @@ def p_factor(*factor, goal, df, variations=[1,2], min_visitors=100):
         combs['visitors_A'].astype(int), combs['visitors_B'].astype(int),\
         combs['n_of_conversions_A'].astype(int), combs['n_of_conversions_B'].astype(int)
         
-        combs = combs[[*factor, 'visitors_A', 'visitors_B', 'n_of_conversions_A', 'n_of_conversions_B', 'cr_A', 'cr_B', 'relative_uplift', 'p-value',\
-               'absolute_uplift', 'srm-probability']]
+        combs = combs[[*factor, 'visitors_A', 'visitors_B', 'n_of_conversions_A', 'n_of_conversions_B', 'cr_A', 'cr_B', 'relative_uplift', 'p_value',\
+               'absolute_uplift', 'srm-p_value']]
         combs[['cr_A', 'cr_B', 'relative_uplift', 'absolute_uplift']] = round((combs[['cr_A', 'cr_B', 'relative_uplift', 'absolute_uplift']]*100),2)
-        combs['p-value'] = round(combs['p-value'], 4)
+        combs['p_value'] = round(combs['p_value'], 4)
         combs['factor'] = 'all_population'
         first_column = combs.pop('factor')
         combs.insert(0, 'factor', first_column)
